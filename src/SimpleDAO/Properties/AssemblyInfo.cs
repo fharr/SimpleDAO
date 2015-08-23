@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SimpleDAO")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Provides very simple Repository and UnitOfWork interfaces which are meant to be used within applications using an IoC container.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Florian Harreau")]
 [assembly: AssemblyProduct("SimpleDAO")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

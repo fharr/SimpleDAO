@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public interface IGenericRepository<TDomain> where TDomain : class
+    public interface IGenericRepository<TDomain>
     {
         /// <summary>
         /// Creates a new object

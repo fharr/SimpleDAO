@@ -8,9 +8,8 @@
     using System.Linq;
 
     public abstract class GenericRepository<TEntity, TDomain, TDbContext> : IGenericRepository<TDomain>
-        where TDbContext : DbContext, new()
+        where TDbContext : DbContext
         where TEntity : class, IMappableEntity<TDomain>, new()
-        where TDomain : class
     {
         #region fields
 

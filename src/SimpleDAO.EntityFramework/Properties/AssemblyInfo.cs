@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SimpleDAO.EntityFramework")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Provides SimpleDAO's Repository and UnitOfWork implementations for EntityFramework. These components are meant to be used within applications using an IoC container.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Florian Harreau")]
 [assembly: AssemblyProduct("SimpleDAO.EntityFramework")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
