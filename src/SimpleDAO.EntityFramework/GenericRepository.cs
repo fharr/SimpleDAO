@@ -60,7 +60,7 @@
 
         public IList<TDomain> GetAll()
         {
-            return this.dbSet.Select(entity => entity.ToDomain()).ToList();
+            return this.dbSet.ToList().Select(entity => entity.ToDomain()).ToList();
         }
 
         public void Update(TDomain domain)
