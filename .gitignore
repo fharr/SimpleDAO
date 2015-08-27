@@ -131,7 +131,7 @@ publish/
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj
-#*.[Pp]ublish.xml
+# *.[Pp]ublish.xml
 *.azurePubxml
 
 # NuGet Packages

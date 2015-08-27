@@ -127,7 +127,7 @@ namespace SimpleDAO.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            this.Connection = new SqlConnection(@"data source=(localdb)\ProjectsV12;initial catalog=SimpleDAO.Tests.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework");
+            this.Connection = new SqlConnection(@"data source=(localdb)\MSSQLLocalDB;initial catalog=SimpleDAO.Tests.Database;integrated security=True;MultipleActiveResultSets=True;");
             this.Connection.Open();
 
             this.CurrentCollectionId = this.GetNextId("Collection");
@@ -341,25 +341,80 @@ namespace SimpleDAO.Tests
         [TestMethod]
         public void TestRemoveRange()
         {
-            //var productsToRemove = new List<ProductDomain>();
+            // Tests on not cached object
+            var productsToRemove = new List<ProductDomain>();
 
-            //// Tests on not cached object
-            //for (int i = 0; i < this.NbProducts / 2; i++)
-            //{
-            //    productsToRemove.Add(new ProductDomain
-            //    {
-            //        Id = this.BaseProductId + i
-            //    });
-            //}
+            for (int i = 0; i < this.NbProducts / 2; i++)
+            {
+                productsToRemove.Add(new ProductDomain
+                {
+                    Id = this.BaseProductId + i
+                });
+            }
 
-            //this.UnitOfWork.ProductRepository.RemoveRange(productsToRemove);
+            this.UnitOfWork.ProductRepository.RemoveRange(productsToRemove);
 
-            //for (int i = 0; i < this.NbProducts / 2; i++)
-            //{
-            //    var productFromAdo = this.GetProductById(this.BaseProductId + i);
+            var productListFromRepo = this.UnitOfWork.ProductRepository.GetAll();
 
-            //    Assert.IsNotNull(productFromAdo, "RemoveRange")
-            //}
+            for (int i = 0; i < this.NbProducts / 2; i++)
+            {
+                var productFromAdo = this.GetProductById(this.BaseProductId + i);
+                var productFromRepo = this.UnitOfWork.ProductRepository.GetById(this.BaseProductId + i);
+
+                Assert.IsNotNull(productFromAdo, "RemoveRange: Ado product not cached deleted before call to SaveChanges.");
+                Assert.IsNull(productFromRepo, "RemoveRange: Ado product not cached not deleted from cache before call to SaveChanges.");
+                Assert.IsFalse(productListFromRepo.Any(prod => prod.Id == this.BaseProductId + i), "RemoveRange: Product not cached not deleted from cache before call to SaveChanges.");
+            }
+
+            this.UnitOfWork.SaveChanges();
+
+            productListFromRepo = this.UnitOfWork.ProductRepository.GetAll();
+
+            for (int i = 0; i < this.NbProducts / 2; i++)
+            {
+                var productFromAdo = this.GetProductById(this.BaseProductId + i);
+                var productFromRepo = this.UnitOfWork.ProductRepository.GetById(this.BaseProductId + i);
+
+                Assert.IsNull(productFromAdo, "RemoveRange: Ado product not cached not deleted after call to SaveChanges.");
+                Assert.IsNull(productFromRepo, "RemoveRange: Ado product not cached not after call to SaveChanges.");
+                Assert.IsFalse(productListFromRepo.Any(prod => prod.Id == this.BaseProductId + i), "RemoveRange: Product not cached not deleted after call to SaveChanges.");
+            }
+
+            // Tests on cached object
+            productsToRemove = new List<ProductDomain>();
+
+            for (int i = this.NbProducts / 2; i < this.NbProducts; i++)
+            {
+                productsToRemove.Add(this.UnitOfWork.ProductRepository.GetById(this.BaseProductId + i));
+            }
+
+            this.UnitOfWork.ProductRepository.RemoveRange(productsToRemove);
+
+            productListFromRepo = this.UnitOfWork.ProductRepository.GetAll();
+
+            for (int i = this.NbProducts / 2; i < this.NbProducts; i++)
+            {
+                var productFromAdo = this.GetProductById(this.BaseProductId + i);
+                var productFromRepo = this.UnitOfWork.ProductRepository.GetById(this.BaseProductId + i);
+
+                Assert.IsNotNull(productFromAdo, "RemoveRange: Ado product deleted before call to SaveChanges.");
+                Assert.IsNull(productFromRepo, "RemoveRange: Ado product not deleted from cache before call to SaveChanges.");
+                Assert.IsFalse(productListFromRepo.Any(prod => prod.Id == this.BaseProductId + i), "RemoveRange: Product not deleted from cache before call to SaveChanges.");
+            }
+
+            this.UnitOfWork.SaveChanges();
+
+            productListFromRepo = this.UnitOfWork.ProductRepository.GetAll();
+
+            for (int i = this.NbProducts / 2; i < this.NbProducts; i++)
+            {
+                var productFromAdo = this.GetProductById(this.BaseProductId + i);
+                var productFromRepo = this.UnitOfWork.ProductRepository.GetById(this.BaseProductId + i);
+
+                Assert.IsNull(productFromAdo, "RemoveRange: Ado product not deleted after call to SaveChanges.");
+                Assert.IsNull(productFromRepo, "RemoveRange: Ado product not after call to SaveChanges.");
+                Assert.IsFalse(productListFromRepo.Any(prod => prod.Id == this.BaseProductId + i), "RemoveRange: Product not deleted after call to SaveChanges.");
+            }
         }
 
         [TestCleanup]
