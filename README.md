@@ -27,7 +27,7 @@ Etc.
 These components are designed to entirely abstract the datastore implementation. The repository interface needs a domain Object to works :
 
 		public FooRepository : IGenericRepository<FooDomain>
-		{ ... }
+		{ [...] }
 
 This domain object does not have to match perfectly the implementation entity, but a two-way mapping has to be possible.
 		
@@ -47,11 +47,34 @@ To abstract the entity framework objects (dbContext, dbSet and entities) from th
 The finder is needed to allow the generic repository to find the entity within the dbContext cache. In order to map your entity object to your domain object, your entity have to implement IMappableEntity :
 
 		public partial class FooEntity : IMappableEntity<FooDomain>
-		{ ... }
+		{ [...] }
 
 This interface will force you to implement two methods needed by the GenericRepository. You could also use the AutoMappableEntity base class :
 	
 		public partial class FooEntity : AutoMappableEntity<FooEntity, FooDOmain>
+		{ [...] }
+		
+This base class use the [AutoMapper](https://github.com/AutoMapper/AutoMapper) to realize these operations. If you need to custom the automapping, you can add to your Entity Partial class a static constructor. It has to call the base class Initialize() method to call its static constructor first:
+
+		partial class FooEntity : AutoMappableEntity<FooEntity, FooDomain>
+		{
+			static FooEntity()
+			{
+				Initialize();
+
+				Mapper.FindTypeMapFor<FooEntity, FooDomain>()
+					.AddAfterMapAction((entity, domain) => (domain as FooDomain).FooProperty = (entity as FooEntity).FooList.Count);
+			}
+		}
+		
+## Tests
+
+To ease the test your own implementation of SimpleDAO, you can use the SimpleDAO.Tests projects. You can create a new project that implement all the interfaces within SimpleDAO.Tests.DAL. You will also have to publish the SimpleDAO.Tests.Database. To do so, double click on the SimpleDAO.Tests.Database\Publish\SimpleDAO.Tests.Database.publish and click on publish.
+
+Finally, you can create a new class in the SimpleDAO.Tests project that implement GenericRepositoryTest and give it your own implementation of SimpleDAO.Tests.DAL.IUnitOfWork :
+
+		[TestClass]
+		public class EntityFrameworkRepositoryTest : GenericRepositoryTest<EFTestUnitOfWork>
 		{ }
 		
-This base class use the [AutoMapper](https://github.com/AutoMapper/AutoMapper) to realize these operations.
+It will test all the basics functionnalities of the SimpleDAO interfaces. Just run all the tests to check if your implementation is correct.
