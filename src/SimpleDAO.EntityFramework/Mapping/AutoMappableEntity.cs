@@ -11,6 +11,9 @@
             Mapper.CreateMap<TDomain, TEntity>();
         }
 
+        protected static void Initialize()
+        { }
+
         public void FillWith(TDomain domain)
         {
             Mapper.Map(domain, this);
