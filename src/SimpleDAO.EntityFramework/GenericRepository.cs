@@ -55,17 +55,25 @@
         {
             var entity = this.dbSet.Find(keyValues);
 
-            return entity.ToDomain();
+            if(entity != null && this.context.Entry(entity).State != EntityState.Deleted)
+                return entity.ToDomain();
+
+            return default(TDomain);
         }
 
         public IList<TDomain> GetAll()
         {
-            return this.dbSet.ToList().Select(entity => entity.ToDomain()).ToList();
+            return this.dbSet.ToList()
+                .Where(entity => this.context.Entry(entity).State != EntityState.Deleted)
+                .Select(entity => entity.ToDomain())
+                .ToList();
         }
 
         public void Update(TDomain domain)
         {
-            this.Attach(domain);
+            var entity = this.Attach(domain);
+
+            this.context.Entry(entity).State = EntityState.Modified;
         }
 
         public void Remove(TDomain domain)

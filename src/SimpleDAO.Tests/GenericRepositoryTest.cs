@@ -1,9 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data.SqlClient;
-using System.Data;
-using SimpleDAO.Tests.Domain;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleDAO.Tests.DAL;
+using SimpleDAO.Tests.Domain;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace SimpleDAO.Tests
 {
@@ -157,7 +159,72 @@ namespace SimpleDAO.Tests
         [TestMethod]
         public void TestInsertDelete()
         {
+            // Tests on cached object
+            var newCollection = new CollectionDomain
+            {
+                Id = this.CurrentCollectionId + 1,
+                Name = "New Collec"
+            };
 
+            this.UnitOfWork.CollectionRepository.Create(newCollection);
+
+            var collectionFromAdo = this.GetCollectionById(newCollection.Id);
+
+            Assert.IsNull(collectionFromAdo, "Create: Collection created before call to SaveChanges.");
+
+            this.UnitOfWork.SaveChanges();
+
+            collectionFromAdo = this.GetCollectionById(newCollection.Id);
+
+            Assert.IsNotNull(collectionFromAdo, "Create: Collection not created after a call to SaveChanges.");
+            Assert.AreEqual(newCollection.Id, collectionFromAdo.Id, "Create: Wrong Collection Id");
+            Assert.AreEqual(newCollection.Name, collectionFromAdo.Name, "Create: Wrong Collection Name");
+
+            this.UnitOfWork.CollectionRepository.Remove(newCollection);
+
+            collectionFromAdo = this.GetCollectionById(newCollection.Id);
+            var collectionFromRepo = this.UnitOfWork.CollectionRepository.GetById(newCollection.Id);
+            var collectionListFromRepo = this.UnitOfWork.CollectionRepository.GetAll();
+
+            Assert.IsNotNull(collectionFromAdo, "Delete: Ado Collection deleted before call to SaveChanges.");
+            Assert.IsNull(collectionFromRepo, "Delete: Repo Collection not deleted from cache before call to SaveChanges.");
+            Assert.IsFalse(collectionListFromRepo.Any(collec => collec.Id == newCollection.Id), "Delete: Repo Collection not deleted from cache before call to SaveChanges.");
+
+            this.UnitOfWork.SaveChanges();
+
+            collectionFromAdo = this.GetCollectionById(newCollection.Id);
+            collectionFromRepo = this.UnitOfWork.CollectionRepository.GetById(newCollection.Id);
+            collectionListFromRepo = this.UnitOfWork.CollectionRepository.GetAll();
+
+            Assert.IsNull(collectionFromAdo, "Delete: Ado Collection not deleted after call to SaveChanges.");
+            Assert.IsNull(collectionFromRepo, "Delete: Repo Collection not deleted after call to SaveChanges.");
+            Assert.IsFalse(collectionListFromRepo.Any(collec => collec.Id == newCollection.Id), "Delete: Collection not deleted after call to SaveChanges.");
+
+            // Tests on not cached object
+            var notCachedObject = new ProductDomain
+            {
+                Id = this.BaseProductId
+            };
+
+            this.UnitOfWork.ProductRepository.Remove(notCachedObject);
+
+            var productFromAdo = this.GetProductById(notCachedObject.Id);
+            var productFromRepo = this.UnitOfWork.ProductRepository.GetById(notCachedObject.Id);
+            var productListFromRepo = this.UnitOfWork.ProductRepository.GetAll();
+
+            Assert.IsNotNull(productFromAdo, "Delete: Ado Product not cached deleted before a call to SaveChanges.");
+            Assert.IsNull(productFromRepo, "Delete: Repo Product not cached not deleted from cache before a call to SaveChanges.");
+            Assert.IsFalse(productListFromRepo.Any(product => product.Id == notCachedObject.Id), "Delete: Repo Product not cached not deleted from cache before call to SaveChanges.");
+
+            this.UnitOfWork.SaveChanges();
+
+            productFromRepo = this.UnitOfWork.ProductRepository.GetById(notCachedObject.Id);
+            productFromAdo = this.GetProductById(notCachedObject.Id);
+            productListFromRepo = this.UnitOfWork.ProductRepository.GetAll();
+
+            Assert.IsNull(productFromRepo, "Delete: Repo Product not cached not deleted after a call to SaveChanges.");
+            Assert.IsNull(productFromAdo, "Delete: Repo Product not cached not deleted after a call to SaveChanges.");
+            Assert.IsFalse(productListFromRepo.Any(product => product.Id == notCachedObject.Id), "Delete: Repo Product not cached not deleted after call to SaveChanges.");
         }
 
         [TestMethod]
@@ -197,19 +264,102 @@ namespace SimpleDAO.Tests
         [TestMethod]
         public void TestGetAll()
         {
+            // Tests on not cached objects
+            var products = this.UnitOfWork.ProductRepository.GetAll();
 
+            Assert.IsTrue(products.Count() >= this.NbProducts);
+
+            for(int i = 0; i < this.NbProducts; i++)
+            {
+                var product = products.FirstOrDefault(prod => prod.Id == this.BaseProductId + i);
+
+                Assert.IsNotNull(product, "GetAll: Product not retrieved, index: " + i);
+            }
+
+            // Tests on cached objects
+            products = this.UnitOfWork.ProductRepository.GetAll();
+
+            Assert.IsTrue(products.Count() >= this.NbProducts);
+
+            for (int i = 0; i < this.NbProducts; i++)
+            {
+                var product = products.FirstOrDefault(prod => prod.Id == this.BaseProductId + i);
+
+                Assert.IsNotNull(product, "GetAll: Product not retrieved, index: " + i);
+            }
         }
 
         [TestMethod]
         public void TestUpdate()
         {
+            // Tests on not cached object
+            var collectionEdit = new CollectionDomain
+            {
+                Id = this.CurrentCollectionId,
+                Name = "New Collec"
+            };
+            var originalCollection = this.GetCollectionById(this.CurrentCollectionId);
 
+            this.UnitOfWork.CollectionRepository.Update(collectionEdit);
+
+            var collectionFromAdo = this.GetCollectionById(this.CurrentCollectionId);
+            var collectionFromRepo = this.UnitOfWork.CollectionRepository.GetById(this.CurrentCollectionId);
+
+            Assert.AreEqual(originalCollection.Name, collectionFromAdo.Name, "Update: Ado Collection not cached updated before call to SaveChanges.");
+            Assert.AreNotEqual(originalCollection.Name, collectionFromRepo.Name, "Update: Repo Collection not cached not updated in cache before call to SaveChanges.");
+
+            this.UnitOfWork.SaveChanges();
+
+            collectionFromAdo = this.GetCollectionById(this.CurrentCollectionId);
+            collectionFromRepo = this.UnitOfWork.CollectionRepository.GetById(this.CurrentCollectionId);
+
+            Assert.AreEqual(collectionEdit.Name, collectionFromAdo.Name, "Update: Ado Collection not cached not updated after call to SaveChanges.");
+            Assert.AreEqual(collectionEdit.Name, collectionFromRepo.Name, "Update: Repo Collection not cached not updated after call to SaveChanges.");
+
+            // Tests on cached object
+            collectionEdit.Name = "Bis Collec";
+
+            originalCollection = this.GetCollectionById(this.CurrentCollectionId);
+
+            this.UnitOfWork.CollectionRepository.Update(collectionEdit);
+
+            collectionFromAdo = this.GetCollectionById(this.CurrentCollectionId);
+            collectionFromRepo = this.UnitOfWork.CollectionRepository.GetById(this.CurrentCollectionId);
+
+            Assert.AreEqual(originalCollection.Name, collectionFromAdo.Name, "Update: Ado Collection updated before call to SaveChanges.");
+            Assert.AreNotEqual(originalCollection.Name, collectionFromRepo.Name, "Update: Repo Collection not updated in cache before call to SaveChanges.");
+
+            this.UnitOfWork.SaveChanges();
+
+            collectionFromAdo = this.GetCollectionById(this.CurrentCollectionId);
+            collectionFromRepo = this.UnitOfWork.CollectionRepository.GetById(this.CurrentCollectionId);
+
+            Assert.AreEqual(collectionEdit.Name, collectionFromAdo.Name, "Update: Ado Collection not updated after call to SaveChanges.");
+            Assert.AreEqual(collectionEdit.Name, collectionFromRepo.Name, "Update: Repo Collection not updated after call to SaveChanges.");
         }
 
         [TestMethod]
-        public void TestRemoveAll()
+        public void TestRemoveRange()
         {
+            //var productsToRemove = new List<ProductDomain>();
 
+            //// Tests on not cached object
+            //for (int i = 0; i < this.NbProducts / 2; i++)
+            //{
+            //    productsToRemove.Add(new ProductDomain
+            //    {
+            //        Id = this.BaseProductId + i
+            //    });
+            //}
+
+            //this.UnitOfWork.ProductRepository.RemoveRange(productsToRemove);
+
+            //for (int i = 0; i < this.NbProducts / 2; i++)
+            //{
+            //    var productFromAdo = this.GetProductById(this.BaseProductId + i);
+
+            //    Assert.IsNotNull(productFromAdo, "RemoveRange")
+            //}
         }
 
         [TestCleanup]
