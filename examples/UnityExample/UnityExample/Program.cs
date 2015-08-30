@@ -1,27 +1,17 @@
-﻿using Microsoft.Practices.Unity;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityExample.DAL;
-using UnityExample.DAL.EntityFramework;
+using UnityExample.DependencyResolver;
 using UnityExample.Domain;
 
 namespace UnityExample
 {
     class Program
     {
-        public static IUnityContainer Container { get; set; }
-
-        static Program()
-        {
-            Program.Container = new UnityContainer()
-                .RegisterType<IUnitOfWork, UnitOfWork>()
-                .RegisterType<ICollectionRepository, CollectionRepository>()
-                .RegisterType<IProductRepository, ProductRepository>();
-        }
-
         static void Main(string[] args)
         {
             Console.WriteLine("===============================");
@@ -30,7 +20,7 @@ namespace UnityExample
             Console.WriteLine("===============================");
             Console.WriteLine();
 
-            var unitOfWork = Program.Container.Resolve<IUnitOfWork>();
+            IUnitOfWork unitOfWork = Resolver.Resolve<IUnitOfWork>();
 
             Console.WriteLine("List of existing collections:");
 
