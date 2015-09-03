@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityExample.DAL;
 using UnityExample.DAL.EntityFramework;
+using UnityExample.DAL.EntityFramework.Mapping;
 
 namespace UnityExample.DependencyResolver
 {
@@ -18,7 +19,8 @@ namespace UnityExample.DependencyResolver
             Container = new UnityContainer()
                 .RegisterType<IUnitOfWork, UnitOfWork>()
                 .RegisterType<ICollectionRepository, CollectionRepository>()
-                .RegisterType<IProductRepository, ProductRepository>();
+                .RegisterType<IProductRepository, ProductRepository>()
+                .RegisterInstance(new Entities());
         }
 
         public static T Resolve<T>()
