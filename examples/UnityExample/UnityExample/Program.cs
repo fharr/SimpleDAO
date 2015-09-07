@@ -186,27 +186,114 @@ namespace UnityExample
 
         private static void CreateProduct(IUnitOfWork uow)
         {
+            Console.WriteLine("Create Product!");
+            Console.WriteLine("---------------");
+            Console.WriteLine();
 
+            Console.Write("Please, enter the name of your product: ");
+            var productName = Console.ReadLine();
+
+            Console.Write("Please, enter the id of the related collection: ");
+            var collectionIdStr = Console.ReadLine();
+            var collectionId = int.Parse(collectionIdStr);
+
+            var product = new ProductDomain
+            {
+                Name = productName,
+                CollectionId = collectionId
+            };
+
+            uow.ProductRepository.Create(product);
+            uow.SaveChanges();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Product successfully ceated.");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private static void DeleteProduct(IUnitOfWork uow)
         {
+            Console.WriteLine("Delete Product!");
+            Console.WriteLine("------------------");
+            Console.WriteLine();
 
+            Console.Write("Please, enter the id of product you want to delete: ");
+            var productId = int.Parse(Console.ReadLine());
+
+            var product = uow.ProductRepository.GetById(productId);
+
+            uow.ProductRepository.Remove(product);
+            uow.SaveChanges();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Product successfully deleted.");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private static void DeleteAllProducts(IUnitOfWork uow)
         {
+            Console.WriteLine("Delete all product!");
+            Console.WriteLine("------------------");
+            Console.WriteLine();
 
+            Console.WriteLine("Please enter the collection id of the products you want to delete (leave empty to delete all products): ");
+            var collectionIdStr = Console.ReadLine();
+
+            var products = uow.ProductRepository.GetAll();
+
+            if (!String.IsNullOrWhiteSpace(collectionIdStr))
+            {
+                products = products.Where(product => product.CollectionId == int.Parse(collectionIdStr)).ToList();
+            }
+
+            uow.ProductRepository.RemoveRange(products);
+            uow.SaveChanges();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Products successfully deleted.");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        private static void UpdateProduct(IUnitOfWork unitOfWork)
+        private static void UpdateProduct(IUnitOfWork uow)
         {
+            Console.WriteLine("Update Product!");
+            Console.WriteLine("---------------");
+            Console.WriteLine();
 
+            Console.Write("Please, enter the id of product you want to update: ");
+            var productId = int.Parse(Console.ReadLine());
+
+            var product = uow.ProductRepository.GetById(productId);
+
+            Console.WriteLine();
+            Console.Write("Please, enter the new name of the product you want to update: ");
+            var productName = Console.ReadLine();
+
+            product.Name = productName;
+
+            uow.ProductRepository.Update(product);
+            uow.SaveChanges();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Product successfully updated.");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private static void GetAllProducts(IUnitOfWork uow)
         {
+            Console.WriteLine("List of all Products:");
+            Console.WriteLine("---------------------");
+            Console.WriteLine();
 
+            var products = uow.ProductRepository.GetAll();
+
+            foreach (var product in products)
+            {
+                Console.WriteLine("- Id: {0}, Name: {1}, Collection name: {2}", product.Id, product.Name, product.CollectionName);
+            }
+
+            if (products.Count == 0)
+                Console.WriteLine("[No product]");
         }
 
         #endregion
