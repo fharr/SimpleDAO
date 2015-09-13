@@ -1,14 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SimpleDAO.Tests.DAL;
-using SimpleDAO.Tests.Domain;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-
-namespace SimpleDAO.Tests
+﻿namespace SimpleDAO.Tests
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using DAL;
+    using Domain;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Linq;
+
     [TestClass]
     public abstract class GenericRepositoryTest<TUnitOfWork>
         where TUnitOfWork : ITestUnitOfWork, new()

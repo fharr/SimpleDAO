@@ -7,29 +7,35 @@
     using System.Data.Entity;
     using System.Linq;
 
-    public abstract class GenericRepository<TEntity, TDomain, TDbContext> : IGenericRepository<TDomain>
-        where TDbContext : DbContext
+    public abstract class GenericRepository<TEntity, TDomain, TUnitOfWork, TDbContext> : IGenericRepository<TDomain>
         where TEntity : class, IMappableEntity<TDomain>, new()
+        where TUnitOfWork : UnitOfWork<TDbContext>
+        where TDbContext : DbContext, new()
     {
         #region fields
 
-        protected TDbContext context;
-        protected DbSet<TEntity> dbSet;
+        protected TUnitOfWork unitOfWork;
         protected Func<TEntity, TDomain, bool> finder;
 
         #endregion fields
 
+        #region properties
+
+        protected TDbContext DbContext { get { return this.unitOfWork.DbContext; } }
+        protected DbSet<TEntity> DbSet { get { return this.DbContext.Set<TEntity>(); } }
+
+        #endregion
+
         #region constructor
 
         /// <summary>
-        /// Creates a new repositoriy with the specified dbContext and key finder
+        /// Creates a new repositoriy who belongs to the specified unit of work and with the specified key finder
         /// </summary>
         /// <param name="dbContext">the dbContext of the underlying database</param>
         /// <param name="finder">a function to identify the entity from the domain</param>
-        public GenericRepository(TDbContext dbContext, Func<TEntity, TDomain, bool> finder)
+        public GenericRepository(TUnitOfWork unitOfWork, Func<TEntity, TDomain, bool> finder)
         {
-            this.context = dbContext;
-            this.dbSet = dbContext.Set<TEntity>();
+            this.unitOfWork = unitOfWork;
             this.finder = finder;
         }
 
@@ -48,14 +54,14 @@
                 throw new AlreadyExistingException<TDomain>(domain);
             }
 
-            this.dbSet.Add(entity);
+            this.DbSet.Add(entity);
         }
 
         public TDomain GetById(params object[] keyValues)
         {
-            var entity = this.dbSet.Find(keyValues);
+            var entity = this.DbSet.Find(keyValues);
 
-            if(entity != null && this.context.Entry(entity).State != EntityState.Deleted)
+            if(entity != null && this.DbContext.Entry(entity).State != EntityState.Deleted)
                 return entity.ToDomain();
 
             return default(TDomain);
@@ -63,8 +69,8 @@
 
         public IList<TDomain> GetAll()
         {
-            return this.dbSet.ToList()
-                .Where(entity => this.context.Entry(entity).State != EntityState.Deleted)
+            return this.DbSet.ToList()
+                .Where(entity => this.DbContext.Entry(entity).State != EntityState.Deleted)
                 .Select(entity => entity.ToDomain())
                 .ToList();
         }
@@ -73,21 +79,21 @@
         {
             var entity = this.Attach(domain);
 
-            this.context.Entry(entity).State = EntityState.Modified;
+            this.DbContext.Entry(entity).State = EntityState.Modified;
         }
 
         public void Remove(TDomain domain)
         {
             var entity = this.Attach(domain);
 
-            this.dbSet.Remove(entity);
+            this.DbSet.Remove(entity);
         }
 
         public void RemoveRange(IList<TDomain> list)
         {
             var entities = list.Select(domain => this.Attach(domain));
 
-            this.dbSet.RemoveRange(entities);
+            this.DbSet.RemoveRange(entities);
         }
 
         #endregion
@@ -96,7 +102,7 @@
 
         public int Count()
         {
-            return this.dbSet.Count();
+            return this.DbSet.Count();
         }
 
         #endregion
@@ -115,7 +121,7 @@
             var entity = this.ToEntity(domain, out isAttached);
 
             if (!isAttached)
-                this.dbSet.Attach(entity);
+                this.DbSet.Attach(entity);
 
             return entity;
         }
@@ -128,7 +134,7 @@
         /// <returns></returns>
         protected TEntity ToEntity(TDomain domain, out bool isAttached)
         {
-            var entity = this.dbSet.Local.SingleOrDefault(user => this.finder(user, domain));
+            var entity = this.DbSet.Local.SingleOrDefault(user => this.finder(user, domain));
 
             isAttached = entity != null;
 
