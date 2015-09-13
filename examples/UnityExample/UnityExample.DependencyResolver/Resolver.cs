@@ -17,10 +17,7 @@ namespace UnityExample.DependencyResolver
         static Resolver()
         {
             Container = new UnityContainer()
-                .RegisterType<IUnitOfWork, UnitOfWork>()
-                .RegisterType<ICollectionRepository, CollectionRepository>()
-                .RegisterType<IProductRepository, ProductRepository>()
-                .RegisterInstance(new Entities());
+                .RegisterType<IUnitOfWork, UnitOfWork>();
         }
 
         public static T Resolve<T>()

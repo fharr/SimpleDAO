@@ -47,8 +47,8 @@
       <HintPath>..\packages\SimpleDAO.1.0.0.0\lib\net46\SimpleDAO.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SimpleDAO.EntityFramework, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimpleDAO.EntityFramework.1.0.1.0\lib\net46\SimpleDAO.EntityFramework.dll</HintPath>
+    <Reference Include="SimpleDAO.EntityFramework, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleDAO.EntityFramework.1.1.0.0\lib\net46\SimpleDAO.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

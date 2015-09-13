@@ -64,6 +64,8 @@ namespace UnityExample
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Sorry, an error occured.");
                     Console.ForegroundColor = ConsoleColor.Gray;
+
+                    unitOfWork = Resolver.Resolve<IUnitOfWork>();
                 }
 
                 Console.WriteLine();

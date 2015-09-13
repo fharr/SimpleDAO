@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleDAO.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,16 +8,16 @@ using UnityExample.DAL.EntityFramework.Mapping;
 
 namespace UnityExample.DAL.EntityFramework
 {
-    public class UnitOfWork : SimpleDAO.EntityFramework.UnitOfWork, IUnitOfWork
+    public class UnitOfWork : UnitOfWork<Entities>, IUnitOfWork
     {
         public ICollectionRepository CollectionRepository { get; private set; }
         public IProductRepository ProductRepository { get; private set; }
 
-        public UnitOfWork(Entities dbContext, ICollectionRepository collectionRepository, IProductRepository productRepository)
+        public UnitOfWork(Entities dbContext)
             : base(dbContext)
         {
-            this.CollectionRepository = collectionRepository;
-            this.ProductRepository = productRepository;
+            this.CollectionRepository = new CollectionRepository(this);
+            this.ProductRepository = new ProductRepository(this);
         }
     }
 }

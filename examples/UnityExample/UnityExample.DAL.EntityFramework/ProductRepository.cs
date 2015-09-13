@@ -9,10 +9,10 @@ using UnityExample.Domain;
 
 namespace UnityExample.DAL.EntityFramework
 {
-    public class ProductRepository : GenericRepository<Product, ProductDomain, Entities>, IProductRepository
+    public class ProductRepository : GenericRepository<Product, ProductDomain, UnitOfWork, Entities>, IProductRepository
     {
-        public ProductRepository(Entities dbContext)
-            : base(dbContext, (entity, domain) => entity.Id == domain.Id)
+        public ProductRepository(UnitOfWork unitOfWork)
+            : base(unitOfWork, (entity, domain) => entity.Id == domain.Id)
         { }
     }
 }
