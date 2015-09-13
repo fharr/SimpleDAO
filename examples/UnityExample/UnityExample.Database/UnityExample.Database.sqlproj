@@ -60,13 +60,13 @@
     <Folder Include="Properties" />
     <Folder Include="dbo" />
     <Folder Include="dbo\Table" />
-    <Folder Include="Publish" />
+    <Folder Include="PublishProfiles" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Table\Collection.sql" />
     <Build Include="dbo\Table\Product.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Publish\UnityExample.Database.publish.xml" />
+    <None Include="PublishProfiles\LocalDatabase.publish.xml" />
   </ItemGroup>
 </Project>
