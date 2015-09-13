@@ -59,13 +59,13 @@
     <Folder Include="Properties" />
     <Folder Include="dbo" />
     <Folder Include="dbo\Table" />
-    <Folder Include="Publish" />
+    <Folder Include="PublishProfiles" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Table\Product.sql" />
     <Build Include="dbo\Table\Collection.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Publish\SimpleDAO.Tests.Database.publish.xml" />
+    <None Include="PublishProfiles\LocalDatabase.publish.xml" />
   </ItemGroup>
 </Project>
