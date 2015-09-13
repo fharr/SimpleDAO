@@ -16,7 +16,7 @@ namespace UnityExample.DAL.EntityFramework.Mapping
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> CollectionId { get; set; }
+        public int CollectionId { get; set; }
     
         public virtual Collection Collection { get; set; }
     }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SimpleDAO.EntityFramework.Exceptions
+﻿namespace SimpleDAO.EntityFramework.Exceptions
 {
+    using System;
+
     public class AlreadyExistingException<TDomain> : Exception
     {
         public TDomain Domain { get; set; }

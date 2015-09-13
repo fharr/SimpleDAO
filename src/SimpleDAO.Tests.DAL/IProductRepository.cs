@@ -1,12 +1,7 @@
-﻿using SimpleDAO.Tests.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SimpleDAO.Tests.DAL
+﻿namespace SimpleDAO.Tests.DAL
 {
+    using Domain;
+
     public interface IProductRepository : IGenericRepository<ProductDomain>
     { }
 }

@@ -10,6 +10,7 @@ namespace UnityExample.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? CollectionId { get; set; }
+        public int CollectionId { get; set; }
+        public string CollectionName { get; set; }
     }
 }

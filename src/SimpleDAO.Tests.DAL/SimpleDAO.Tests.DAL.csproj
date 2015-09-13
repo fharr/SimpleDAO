@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="ICollectionRepository.cs" />
     <Compile Include="IProductRepository.cs" />
-    <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="ITestUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

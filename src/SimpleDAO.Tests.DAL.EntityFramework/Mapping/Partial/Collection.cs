@@ -1,14 +1,9 @@
-﻿using AutoMapper;
-using SimpleDAO.EntityFramework.Mapping;
-using SimpleDAO.Tests.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SimpleDAO.Tests.DAL.EntityFramework.Mapping
+﻿namespace SimpleDAO.Tests.DAL.EntityFramework.Mapping
 {
+    using AutoMapper;
+    using SimpleDAO.EntityFramework.Mapping;
+    using Domain;
+
     partial class Collection : AutoMappableEntity<Collection, CollectionDomain>
     {
         static Collection()

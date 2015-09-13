@@ -1,19 +1,23 @@
 ﻿namespace SimpleDAO.EntityFramework
 {
-    using System;
     using System.Data.Entity;
 
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork<TDbContext> : IUnitOfWork
+        where TDbContext : DbContext, new()
     {
         #region properties
 
-        public DbContext DbContext { get; private set; }
+        public TDbContext DbContext { get; private set; }
 
         #endregion
 
         #region constructors
 
-        public UnitOfWork(DbContext dbContext)
+        public UnitOfWork()
+            : this(new TDbContext())
+        { }
+
+        public UnitOfWork(TDbContext dbContext)
         {
             this.DbContext = dbContext;
         }

@@ -8,7 +8,7 @@ You only need to publish the database to run the example. To do so, double click
 
 		UnityExample.Database > Publish > UnityExample.Database.publish.xml
 		
-Then click on publish. This will create a new database called Unity.Database into your (localdb)\ProjectsV12 sql server instance.
+Then click on publish. This will create a new database called Unity.Database into your (localdb)\MSSQLLocalDB sql server instance.
 
 ## Start
 
