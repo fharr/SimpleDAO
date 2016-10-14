@@ -1,5 +1,6 @@
 ﻿namespace SimpleDAO
 {
+    using System.Collections;
     using System.Collections.Generic;
 
     public interface IGenericRepository<TDomain>

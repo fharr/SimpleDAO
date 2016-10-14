@@ -1,0 +1,31 @@
+{
+  "title": "SimpleDAO.EFCore",
+  "description": "Provides SimpleDAO's Repository and UnitOfWork implementations for EntityFramework Core. These components are meant to be used within applications using an IoC container.",
+  "authors": [ "Florian Harreau" ],
+  "copyright": "Copyright 2016",
+
+  "packOptions": {
+    "projectUrl": "https://github.com/fharr/SimpleDAO",
+    "licenseUrl": "https://github.com/fharr/SimpleDAO/blob/master/LICENSE",
+    "releaseNotes": "https://github.com/fharr/SimpleDAO/releases",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/fharr/SimpleDAO"
+    }
+  },
+
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "AutoMapper": "5.1.1",
+    "Microsoft.EntityFrameworkCore": "1.0.1",
+    "SimpleDao": {
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net451": {},
+    "netstandard1.3": {}
+  }
+}

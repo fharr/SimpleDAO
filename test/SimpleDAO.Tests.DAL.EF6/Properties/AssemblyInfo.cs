@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Florian Harreau")]
-[assembly: AssemblyProduct("SimpleDAO.Assembly")]
+[assembly: AssemblyProduct("SimpleDAO.Tests.DAL.EF6")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("532bb66e-5a0f-41bf-b86c-3edbd1b487d7")]
+[assembly: Guid("96409a8d-8e6b-4762-873a-88bcfa7fc97c")]

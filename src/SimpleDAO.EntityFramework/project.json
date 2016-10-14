@@ -1,0 +1,28 @@
+{
+  "title": "SimpleDAO.EF6",
+  "description": "Provides SimpleDAO's Repository and UnitOfWork implementations for EntityFramework 6. These components are meant to be used within applications using an IoC container.",
+  "authors": [ "Florian Harreau" ],
+  "copyright": "Copyright 2016",
+
+  "packOptions": {
+    "projectUrl": "https://github.com/fharr/SimpleDAO",
+    "licenseUrl": "https://github.com/fharr/SimpleDAO/blob/master/LICENSE",
+    "releaseNotes": "https://github.com/fharr/SimpleDAO/releases",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/fharr/SimpleDAO"
+    }
+  },
+
+  "version": "2.0.0-*",
+
+  "dependencies": {
+    "AutoMapper": "5.1.1",
+    "EntityFramework": "6.1.3",
+    "SimpleDAO": "2.0.0-*"
+  },
+
+  "frameworks": {
+    "net45": {}
+  }
+}
