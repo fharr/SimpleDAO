@@ -1,5 +1,6 @@
 ﻿namespace SimpleDAO.EFCore
 {
+    using System;
     using Microsoft.EntityFrameworkCore;
 
     public class UnitOfWork<TDbContext> : IUnitOfWork
@@ -8,6 +9,8 @@
         #region properties
 
         public TDbContext DbContext { get; private set; }
+
+        public IDataStore DataStore { get; private set; }
 
         #endregion
 
@@ -20,6 +23,7 @@
         public UnitOfWork(TDbContext dbContext)
         {
             this.DbContext = dbContext;
+            this.DataStore = new EFCoreDataStore(dbContext);
         }
 
         #endregion

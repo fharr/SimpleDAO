@@ -11,17 +11,31 @@
             Mapper.Initialize(cfg => cfg.CreateMap<TDomain, TEntity>());
         }
 
-        protected static void Initialize()
-        { }
-
         public void FillWith(TDomain domain)
         {
+            BeforeFilling(domain);
             Mapper.Map(domain, this);
+            AfterFilling(domain);
         }
 
         public TDomain ToDomain()
         {
-            return Mapper.Map<TDomain>(this);
+            var domain = Mapper.Map<TDomain>(this);
+            OnConvert(domain);
+            return domain;
         }
+
+        #region protected methods
+
+        protected virtual void AfterFilling(TDomain domain)
+        { }
+
+        protected virtual void BeforeFilling(TDomain domain)
+        { }
+
+        protected virtual void OnConvert(TDomain domain)
+        { }
+
+        #endregion
     }
 }

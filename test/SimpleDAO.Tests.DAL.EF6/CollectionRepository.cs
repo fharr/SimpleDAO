@@ -1,13 +1,14 @@
-﻿namespace SimpleDAO.Tests.DAL.EntityFramework
+﻿namespace SimpleDAO.Tests.DAL.EF6
 {
-    using SimpleDAO.EntityFramework;
+    using EF6;
     using Mapping;
     using Domain;
+    using SimpleDAO.EF6;
 
-    public class CollectionRepository : GenericRepository<Collection, CollectionDomain, EFTestUnitOfWork, DbEntities>, ICollectionRepository
+    public class CollectionRepository : EF6GenericRepository<Collection, CollectionDomain, TestUnitOfWork, Model>, ICollectionRepository
     {
-        public CollectionRepository(EFTestUnitOfWork unitOfWork)
-            : base(unitOfWork, (entity,domain) => entity.Id == domain.Id)
+        public CollectionRepository(TestUnitOfWork unitOfWork)
+            : base(unitOfWork, (entity, domain) => entity.Id == domain.Id)
         { }
     }
 }

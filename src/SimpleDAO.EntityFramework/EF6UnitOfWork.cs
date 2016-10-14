@@ -2,7 +2,7 @@
 {
     using System.Data.Entity;
 
-    public class UnitOfWork<TDbContext> : IUnitOfWork
+    public class EF6UnitOfWork<TDbContext> : IUnitOfWork
         where TDbContext : DbContext, new()
     {
         #region properties
@@ -15,11 +15,11 @@
 
         #region constructors
 
-        public UnitOfWork()
+        public EF6UnitOfWork()
             : this(new TDbContext())
         { }
 
-        public UnitOfWork(TDbContext dbContext)
+        public EF6UnitOfWork(TDbContext dbContext)
         {
             this.DbContext = dbContext;
             this.DataStore = new EF6DataStore(dbContext);

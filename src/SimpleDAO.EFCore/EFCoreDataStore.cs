@@ -1,8 +1,12 @@
-﻿namespace SimpleDAO.EF6
-{
-    using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-    public class EF6DataStore : IDataStore
+namespace SimpleDAO.EFCore
+{
+    public class EFCoreDataStore : IDataStore
     {
         #region private fields
 
@@ -12,7 +16,7 @@
 
         #region constructors
 
-        internal EF6DataStore(DbContext dbContext)
+        internal EFCoreDataStore(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -23,22 +27,22 @@
 
         public void CreateIfNotExists()
         {
-            _dbContext.Database.CreateIfNotExists();
+            _dbContext.Database.EnsureCreated();
         }
 
         public void Delete()
         {
-            _dbContext.Database.Delete();
+            _dbContext.Database.EnsureDeleted();
         }
 
         public bool Exists()
         {
-            return _dbContext.Database.Exists();
+            throw new NotSupportedException();
         }
 
         public bool IsValid()
         {
-            return _dbContext.Database.CompatibleWithModel(true);
+            throw new NotSupportedException();
         }
 
         #endregion

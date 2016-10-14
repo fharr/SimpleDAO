@@ -1,10 +1,16 @@
 {
   "version": "1.0.0-*",
+
   "testRunner": "mstest",
+
   "dependencies": {
     "dotnet-test-mstest": "1.1.1-preview",
-    "MSTest.TestFramework": "1.0.5-preview"
+    "MSTest.TestFramework": "1.0.5-preview",
+    "SimpleDAO.Tests.DAL": "1.0.0-*",
+    "SimpleDAO.Tests.Domain": "1.0.0-*",
+    "System.Data.SqlClient": "4.1.0"
   },
+
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
@@ -15,6 +21,11 @@
           "type": "platform",
           "version": "1.0.1"
         }
+      }
+    },
+    "net451": {
+      "dependencies": {
+        "SimpleDAO.Tests.DAL.EF6": "1.0.0-*"
       }
     }
   }
