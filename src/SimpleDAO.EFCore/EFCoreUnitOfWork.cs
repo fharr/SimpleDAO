@@ -1,6 +1,6 @@
-﻿namespace SimpleDAO.EntityFramework
+﻿namespace SimpleDAO.EFCore
 {
-    using System.Data.Entity;
+    using Microsoft.EntityFrameworkCore;
 
     public class UnitOfWork<TDbContext> : IUnitOfWork
         where TDbContext : DbContext, new()

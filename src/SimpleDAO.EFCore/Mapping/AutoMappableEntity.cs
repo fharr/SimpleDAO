@@ -1,4 +1,4 @@
-﻿namespace SimpleDAO.EntityFramework.Mapping
+﻿namespace SimpleDAO.EFCore.Mapping
 {
     using AutoMapper;
 

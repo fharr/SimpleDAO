@@ -1,4 +1,4 @@
-﻿namespace SimpleDAO.EntityFramework.Exceptions
+﻿namespace SimpleDAO.EF6.Exceptions
 {
     using System;
 

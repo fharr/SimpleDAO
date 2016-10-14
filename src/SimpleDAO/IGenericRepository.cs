@@ -1,8 +1,11 @@
 ﻿namespace SimpleDAO
 {
-    using System.Collections;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// This interface offers basic CRUD fonctionnalities.
+    /// </summary>
+    /// <typeparam name="TDomain"></typeparam>
     public interface IGenericRepository<TDomain>
     {
         /// <summary>

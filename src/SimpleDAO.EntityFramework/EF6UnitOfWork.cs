@@ -1,6 +1,6 @@
-﻿namespace SimpleDAO.EntityFramework
+﻿namespace SimpleDAO.EF6
 {
-    using Microsoft.EntityFrameworkCore;
+    using System.Data.Entity;
 
     public class UnitOfWork<TDbContext> : IUnitOfWork
         where TDbContext : DbContext, new()
@@ -8,6 +8,8 @@
         #region properties
 
         public TDbContext DbContext { get; private set; }
+
+        public IDataStore DataStore { get; private set; }
 
         #endregion
 
@@ -20,6 +22,7 @@
         public UnitOfWork(TDbContext dbContext)
         {
             this.DbContext = dbContext;
+            this.DataStore = new EF6DataStore(dbContext);
         }
 
         #endregion

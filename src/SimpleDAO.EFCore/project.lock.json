@@ -187,6 +187,19 @@
           "lib/net45/Remotion.Linq.dll": {}
         }
       },
+      "SimpleDao/2.0.0-rc1": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime": "4.1.0",
+          "System.Runtime.InteropServices": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.1/SimpleDAO.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.1/SimpleDAO.dll": {}
+        }
+      },
       "System.Collections/4.0.11": {
         "type": "package",
         "frameworkAssemblies": [
@@ -747,6 +760,19 @@
         },
         "runtime": {
           "lib/netstandard1.0/_._": {}
+        }
+      },
+      "SimpleDao/2.0.0-rc1": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime": "4.1.0",
+          "System.Runtime.InteropServices": "4.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.1/SimpleDAO.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.1/SimpleDAO.dll": {}
         }
       },
       "System.AppContext/4.1.0": {
@@ -1961,6 +1987,16 @@
         "lib/netstandard1.0/_._",
         "runtime.native.System.Security.Cryptography.4.0.0.nupkg.sha512",
         "runtime.native.System.Security.Cryptography.nuspec"
+      ]
+    },
+    "SimpleDao/2.0.0-rc1": {
+      "sha512": "PPNnHeogrR3Vfg5FaMSpZj2fgU+ChtiTp9iiDkeR+naB3XFzDeObdIb/KRiF1qAZO4JnjvUI1v9NxEWqDzMjsg==",
+      "type": "package",
+      "path": "SimpleDao/2.0.0-rc1",
+      "files": [
+        "SimpleDAO.2.0.0-rc1.nupkg.sha512",
+        "SimpleDAO.nuspec",
+        "lib/netstandard1.1/SimpleDAO.dll"
       ]
     },
     "System.AppContext/4.1.0": {
@@ -5139,7 +5175,7 @@
     "": [
       "AutoMapper >= 5.1.1",
       "Microsoft.EntityFrameworkCore >= 1.0.1",
-      "SimpleDao"
+      "SimpleDao >= 2.0.0-*"
     ],
     ".NETFramework,Version=v4.5.1": [],
     ".NETStandard,Version=v1.3": []

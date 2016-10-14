@@ -1,11 +1,11 @@
-﻿namespace SimpleDAO.EntityFramework
+﻿namespace SimpleDAO.EFCore
 {
-    using Mapping;
-    using Exceptions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.EntityFrameworkCore;
+    using Mapping;
+    using Exceptions;
 
     public abstract class GenericRepository<TEntity, TDomain, TUnitOfWork, TDbContext> : IGenericRepository<TDomain>
         where TEntity : class, IMappableEntity<TDomain>, new()
@@ -62,7 +62,7 @@
             // TODO : fix the find
             var entity = this.DbSet.FirstOrDefault();
 
-            if(entity != null && this.DbContext.Entry(entity).State != EntityState.Deleted)
+            if (entity != null && this.DbContext.Entry(entity).State != EntityState.Deleted)
                 return entity.ToDomain();
 
             return default(TDomain);

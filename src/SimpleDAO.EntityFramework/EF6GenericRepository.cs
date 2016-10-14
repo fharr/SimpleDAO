@@ -1,4 +1,4 @@
-﻿namespace SimpleDAO.EntityFramework
+﻿namespace SimpleDAO.EF6
 {
     using Mapping;
     using Exceptions;
@@ -61,7 +61,7 @@
         {
             var entity = this.DbSet.Find(keyValues);
 
-            if(entity != null && this.DbContext.Entry(entity).State != EntityState.Deleted)
+            if (entity != null && this.DbContext.Entry(entity).State != EntityState.Deleted)
                 return entity.ToDomain();
 
             return default(TDomain);
