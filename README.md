@@ -28,7 +28,7 @@ Etc.
 These components are designed to entirely abstract the datastore implementation. The repository interface needs a domain Object to works:
 
 ```cs
-public FooRepository : IGenericRepository<FooDomain>
+public class FooRepository : IGenericRepository<FooDomain>
 { [...] }
 ```
 
@@ -39,7 +39,7 @@ This domain object does not have to match perfectly the implementation entity, b
 To abstract the entity framework objects (dbContext, dbSet and entities) from the rest of the application, you need to provide them to the generic entity framework implementation:
 
 ```cs
-public FooRepository : GenericRepository<FooEntity, FooDomain, FooUnitOfWork, FooDbContext>
+public class FooRepository : GenericRepository<FooEntity, FooDomain, FooUnitOfWork, FooDbContext>
 {
     public GenericRepository(FooUnitOfWork unitOfWork)
         : base(unitOfWork, (fooDomain, fooEntity) => fooDomain.Id == fooEntity.Id)
