@@ -1,6 +1,8 @@
+/!\ This example dates from an old version of SimpleDAO (before the release of .NET Core). It requires Visual Studio to be run and needs to be ported to .NET Core. /!\
+
 # Unity Example
 
-This example provides you a simple but concrete use case of SimpleDAO.
+This example provides you a simple but concrete use case of SimpleDAO. 
 
 ## Preparation
 
