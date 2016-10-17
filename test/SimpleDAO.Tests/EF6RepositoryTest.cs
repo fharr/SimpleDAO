@@ -5,7 +5,7 @@ namespace SimpleDAO.Tests
     using DAL.EF6;
 
     [TestClass]
-    public class EntityFrameworkRepositoryTest : GenericRepositoryTest<TestUnitOfWork>
+    public class EF6RepositoryTest : GenericRepositoryTest<TestUnitOfWork>
     { }
 }
 #endif

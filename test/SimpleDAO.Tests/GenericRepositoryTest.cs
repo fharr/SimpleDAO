@@ -6,14 +6,14 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Data.SqlClient;
     using System.Linq;
+    using Microsoft.Data.Sqlite;
 
     [TestClass]
     public abstract class GenericRepositoryTest<TUnitOfWork>
         where TUnitOfWork : ITestUnitOfWork, new()
     {
-        public SqlConnection Connection { get; set; }
+        public SqliteConnection Connection { get; set; }
         public ITestUnitOfWork UnitOfWork { get; set; }
 
         public int CurrentCollectionId { get; set; }
@@ -29,33 +29,30 @@
 
         private void Create(CollectionDomain domain)
         {
-            SqlCommand cmd = new SqlCommand();
+            var cmd = Connection.CreateCommand();
 
             cmd.CommandText = String.Format("INSERT INTO Collection VALUES ({0}, '{1}')", domain.Id, domain.Name);
             cmd.CommandType = CommandType.Text;
-            cmd.Connection = this.Connection;
 
             var nbRow = cmd.ExecuteNonQuery();
         }
 
         private void Create(ProductDomain domain)
         {
-            SqlCommand cmd = new SqlCommand();
+            var cmd = Connection.CreateCommand();
 
             cmd.CommandText = String.Format("INSERT INTO Product VALUES ({0}, '{1}', {2}, {3})", domain.Id, domain.Name, domain.Price, domain.CollectionId);
             cmd.CommandType = CommandType.Text;
-            cmd.Connection = this.Connection;
 
             var nbRow = cmd.ExecuteNonQuery();
         }
 
         private int GetNextId(string table)
         {
-            SqlCommand cmd = new SqlCommand();
+            var cmd = Connection.CreateCommand();
 
             cmd.CommandText = "SELECT ISNULL(MAX(Id), 0) FROM " + table;
             cmd.CommandType = CommandType.Text;
-            cmd.Connection = this.Connection;
 
             var id = (int)cmd.ExecuteScalar();
 
@@ -64,19 +61,19 @@
 
         private CollectionDomain GetCollectionById(int id)
         {
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
+            var cmd = Connection.CreateCommand();
+            SqliteDataReader reader;
 
             cmd.CommandText = "SELECT * FROM Collection WHERE Id = " + id;
             cmd.CommandType = CommandType.Text;
             cmd.Connection = this.Connection;
 
             reader = cmd.ExecuteReader();
-            
+
             var domain = new CollectionDomain();
 
             if (reader.Read())
-            {                 
+            {
                 domain.Id = reader.GetInt32(0);
                 domain.Name = reader.GetString(1);
 
@@ -88,8 +85,8 @@
 
         private ProductDomain GetProductById(int id)
         {
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
+            var cmd = Connection.CreateCommand();
+            SqliteDataReader reader;
 
             cmd.CommandText = "SELECT * FROM Product WHERE Id = " + id;
             cmd.CommandType = CommandType.Text;
@@ -113,11 +110,10 @@
 
         private void Delete(string table, int id)
         {
-            SqlCommand cmd = new SqlCommand();
+            var cmd = Connection.CreateCommand();
 
             cmd.CommandText = String.Format("DELETE {0} WHERE Id = {1}", table, id);
             cmd.CommandType = CommandType.Text;
-            cmd.Connection = this.Connection;
 
             cmd.ExecuteNonQuery();
         }
@@ -127,7 +123,7 @@
         [TestInitialize]
         public void TestInitialize()
         {
-            this.Connection = new SqlConnection(@"data source=(localdb)\MSSQLLocalDB;initial catalog=SimpleDAO.Tests.Database;integrated security=True;MultipleActiveResultSets=True;");
+            this.Connection = new SqliteConnection(@"data source='Data/Test.sqlite");
             this.Connection.Open();
 
             this.CurrentCollectionId = this.GetNextId("Collection");
@@ -142,7 +138,7 @@
 
             this.Create(collection);
 
-            for(int i = 0; i< this.NbProducts; i++)
+            for (int i = 0; i < this.NbProducts; i++)
             {
                 var product = new ProductDomain
                 {
@@ -269,7 +265,7 @@
 
             Assert.IsTrue(products.Count() >= this.NbProducts);
 
-            for(int i = 0; i < this.NbProducts; i++)
+            for (int i = 0; i < this.NbProducts; i++)
             {
                 var product = products.FirstOrDefault(prod => prod.Id == this.BaseProductId + i);
 
@@ -420,7 +416,7 @@
         [TestCleanup]
         public void TestCleanup()
         {
-            for(int i = 0; i < this.NbProducts; i++)
+            for (int i = 0; i < this.NbProducts; i++)
             {
                 this.Delete("Product", this.BaseProductId + i);
             }

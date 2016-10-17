@@ -8,11 +8,20 @@
     "MSTest.TestFramework": "1.0.5-preview",
     "SimpleDAO.Tests.DAL": "1.0.0-*",
     "SimpleDAO.Tests.Domain": "1.0.0-*",
-    "System.Data.SqlClient": "4.1.0"
+    "Microsoft.Data.Sqlite": "1.0.0"
+  },
+
+  "buildOptions": {
+    "copyToOutput": "Data\\Test.sqlite"
   },
 
   "frameworks": {
     "netcoreapp1.0": {
+      "buildOptions": {
+        "compile": {
+          "excludeFiles": "EF6RepositoryTest.cs"
+        }
+      },
       "imports": [
         "dnxcore50"
       ],
