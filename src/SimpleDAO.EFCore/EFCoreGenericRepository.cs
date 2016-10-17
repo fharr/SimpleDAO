@@ -7,9 +7,9 @@
     using Mapping;
     using Exceptions;
 
-    public abstract class GenericRepository<TEntity, TDomain, TUnitOfWork, TDbContext> : IGenericRepository<TDomain>
+    public abstract class EFCoreGenericRepository<TEntity, TDomain, TUnitOfWork, TDbContext> : IGenericRepository<TDomain>
         where TEntity : class, IMappableEntity<TDomain>, new()
-        where TUnitOfWork : UnitOfWork<TDbContext>
+        where TUnitOfWork : EFCoreUnitOfWork<TDbContext>
         where TDbContext : DbContext, new()
     {
         #region fields
@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="dbContext">the dbContext of the underlying database</param>
         /// <param name="finder">a function to identify the entity from the domain</param>
-        public GenericRepository(TUnitOfWork unitOfWork, Func<TEntity, TDomain, bool> finder)
+        public EFCoreGenericRepository(TUnitOfWork unitOfWork, Func<TEntity, TDomain, bool> finder)
         {
             this.unitOfWork = unitOfWork;
             this.finder = finder;

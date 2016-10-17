@@ -24,10 +24,12 @@ namespace SimpleDAO.Tests.DAL.EF6.Mapping
 
         public virtual Collection Collection { get; set; }
 
-        protected override void OnConvert(ProductDomain domain)
+        public override ProductDomain ToDomain()
         {
-            base.OnConvert(domain);
+            var domain = base.ToDomain();
             domain.CollectionName = this.Collection.Name;
+
+            return domain;
         }
     }
 }

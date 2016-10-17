@@ -2,12 +2,23 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "SimpleDAO.EFCore": "1.0.0-*",
+    "SimpleDAO.Tests.DAL": "1.0.0-*",
+    "SimpleDAO.Tests.Domain": "1.0.0-*",
+    "Microsoft.EntityFrameworkCore": "1.0.1",
+    "Microsoft.EntityFrameworkCore.Sqlite": "1.0.1",
+    "Microsoft.EntityFrameworkCore.Sqlite.Design": {
+      "type": "build",
+      "version": "1.0.1"
+    }
+  },
+
+  "tools": {
+    "Microsoft.EntityFrameworkCore.Tools": "1.0.0-preview2-final"
   },
 
   "frameworks": {
-    "netstandard1.6": {
-      "imports": "dnxcore50"
-    }
+    "netcoreapp1.0": {},
+    "net451": {}
   }
 }

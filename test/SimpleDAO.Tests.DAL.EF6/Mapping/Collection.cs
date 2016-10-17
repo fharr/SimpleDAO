@@ -28,10 +28,12 @@ namespace SimpleDAO.Tests.DAL.EF6.Mapping
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
 
-        protected override void OnConvert(CollectionDomain domain)
+        public override CollectionDomain ToDomain()
         {
-            base.OnConvert(domain);
+            var domain = base.ToDomain();
             domain.NbProducts = this.Products.Count;
+
+            return domain;
         }
     }
 }
