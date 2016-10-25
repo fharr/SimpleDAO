@@ -7,7 +7,7 @@
         public TDomain Domain { get; set; }
 
         public AlreadyExistingException(TDomain domain)
-            : base("An object with that key already exists and cannot be created")
+            : base("An object with that key already exists.")
         {
             this.Domain = domain;
         }

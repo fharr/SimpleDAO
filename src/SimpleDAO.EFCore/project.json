@@ -19,7 +19,7 @@
   "dependencies": {
     "AutoMapper": "5.1.1",
     "Microsoft.EntityFrameworkCore": "1.0.1",
-    "SimpleDAO": "2.0.0-*"
+    "SimpleDAO": "2.0.0"
   },
 
   "frameworks": {

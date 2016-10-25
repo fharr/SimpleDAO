@@ -45,11 +45,11 @@
 
         public void Create(TDomain domain)
         {
-            bool isAttached;
+            bool exists;
 
-            var entity = this.ToEntity(domain, out isAttached);
+            var entity = this.ToEntity(domain, out exists);
 
-            if (isAttached)
+            if (exists)
             {
                 throw new AlreadyExistingException<TDomain>(domain);
             }
@@ -57,16 +57,7 @@
             this.DbSet.Add(entity);
         }
 
-        public TDomain GetById(params object[] keyValues)
-        {
-            // TODO : fix the find
-            var entity = this.DbSet.FirstOrDefault();
-
-            if (entity != null && this.DbContext.Entry(entity).State != EntityState.Deleted)
-                return entity.ToDomain();
-
-            return default(TDomain);
-        }
+        public abstract TDomain GetById(params object[] keyValues);
 
         public IList<TDomain> GetAll()
         {
@@ -78,23 +69,36 @@
 
         public void Update(TDomain domain)
         {
-            var entity = this.Attach(domain);
+            bool exists;
 
-            this.DbContext.Entry(entity).State = EntityState.Modified;
+            var entity = this.ToEntity(domain, out exists);
+
+            if (!exists)
+            {
+                throw new NotExistingException<TDomain>(domain);
+            }
         }
 
         public void Remove(TDomain domain)
         {
-            var entity = this.Attach(domain);
+            bool exists;
+
+            var entity = this.ToEntity(domain, out exists);
+
+            if (!exists)
+            {
+                throw new NotExistingException<TDomain>(domain);
+            }
 
             this.DbSet.Remove(entity);
         }
 
         public void RemoveRange(IList<TDomain> list)
         {
-            var entities = list.Select(domain => this.Attach(domain));
-
-            this.DbSet.RemoveRange(entities);
+            foreach (var domain in list)
+            {
+                this.Remove(domain);
+            }
         }
 
         #endregion
@@ -111,35 +115,18 @@
         #region protected methods
 
         /// <summary>
-        /// Converts the specified domain into an entity and attaches it to the context if needed
-        /// </summary>
-        /// <param name="domain"></param>
-        /// <returns></returns>
-        protected TEntity Attach(TDomain domain)
-        {
-            bool isAttached;
-
-            var entity = this.ToEntity(domain, out isAttached);
-
-            if (!isAttached)
-                this.DbSet.Attach(entity);
-
-            return entity;
-        }
-
-        /// <summary>
         /// Converts the specified domain into an entity
         /// </summary>
         /// <param name="domain">the domain to convert</param>
-        /// <param name="isAttached">output parameter to know if the entity is already attached into the context</param>
+        /// <param name="exists">output parameter to know if the entity already exists in the database</param>
         /// <returns></returns>
-        protected TEntity ToEntity(TDomain domain, out bool isAttached)
+        protected TEntity ToEntity(TDomain domain, out bool exists)
         {
-            var entity = this.DbSet.FirstOrDefault(user => this.finder(user, domain));
+            var entity = this.DbSet.FirstOrDefault(e => this.finder(e, domain));
 
-            isAttached = entity != null;
+            exists = entity != null;
 
-            if (!isAttached)
+            if (!exists)
                 entity = new TEntity();
 
             entity.FillWith(domain);
