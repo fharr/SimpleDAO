@@ -5,9 +5,18 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class InMemoryRepository<T> : IGenericRepository<T>
+    public abstract class InMemoryRepository<T> : IGenericRepository<T>
         where T : new()
     {
+        #region static constructor
+
+        static InMemoryRepository()
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<T, T>());
+        }
+
+        #endregion
+
         #region fields
 
         protected Dictionary<T, T> _livingCollection;
@@ -42,10 +51,7 @@
             return _livingCollection.Values.ToList();
         }
 
-        public T GetById(params object[] keyValues)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract T GetById(params object[] keyValues);
 
         public void Remove(T domain)
         {
@@ -54,7 +60,10 @@
 
         public void RemoveRange(IList<T> list)
         {
-            throw new NotImplementedException();
+            foreach (var domain in list)
+            {
+                Remove(domain);
+            }
         }
 
         public void Update(T domain)
